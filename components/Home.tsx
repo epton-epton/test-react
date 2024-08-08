@@ -2,42 +2,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import FormReg from '@/components/FormReg';
-import FormLogin from '@/components/FormLogin';
-import Logout from '@/components/Logout';
-import ButtonDefault from '@/components/ui/ButtonDefault';
-import { SessionProvider } from 'next-auth/react'; 
+import ModelItem from '@/components/ModelItem/ModelItem';
+import styles from '@/components/modelItem/modelItem.module.css';
+import dotenv from 'dotenv';
 
 const Home: React.FC = () => {
-  const [showLogin, setShowLogin] = useState<boolean>(false);
-  const [showReg, setShowReg] = useState<boolean>(false);
-
-  const handleButtonClick1 = () => {
-    setShowLogin(true);
-    setShowReg(false);
-  };
-
-  const handleButtonClick2 = () => {
-    setShowLogin(false);
-    setShowReg(true);
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-3xl font-bold mb-4">Login / Registration</h1>
-
-      <div className="space-x-4">
-        <ButtonDefault className="bg-blue-500" onClick={handleButtonClick1}>
-          Login
-        </ButtonDefault>
-        <ButtonDefault className="bg-green-500" onClick={handleButtonClick2}>
-          Registration
-        </ButtonDefault>
+    <div className="container mx-auto flex flex-wrap space-y-3 items-center">
+      <div className="w-full">
+        <ModelItem bgUrl="/model01.jpeg" modelName='Model One' modelDesc='Best model on our website!' className={`${styles.modelItem100}`} />
       </div>
-
-      {showLogin && <div className="mt-4 bg-gray-200 p-4 rounded"><FormLogin /></div>}
-      {showReg && <div className="mt-4 bg-gray-200 p-4 rounded"><FormReg /></div>}
-    </div>
+      <div className="flex w-full space-x-3">
+        <ModelItem bgUrl="/model02.webp" modelName='Model Two' modelDesc='' className={`${styles.modelItem25} flex-grow basis-[25%]`} />
+        <ModelItem bgUrl="/model03.jpg" modelName='Model Three' modelDesc='' className={`${styles.modelItem35} flex-grow basis-[35%]`} />
+        <ModelItem bgUrl="/model04.jpg" modelName='Model Four' modelDesc='' className={`${styles.modelItem40} flex-grow basis-[40%]`} />
+      </div>      
+     </div>    
   );
 };
 

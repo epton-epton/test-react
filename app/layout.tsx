@@ -1,4 +1,5 @@
 import "./globals.css";
+import Header from '@/components/Header';
 
 export const metadata = {
   title: 'Next.js',
@@ -12,7 +13,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="bg-neutral-100">
+        <Header/>
+        {children}
+      </body>
     </html>
   )
 }
