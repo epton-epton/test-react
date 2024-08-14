@@ -1,5 +1,6 @@
 import "./globals.css";
 import Header from '@/components/Header';
+import { Toaster } from 'sonner';
 
 export const metadata = {
   title: 'Next.js',
@@ -21,6 +22,7 @@ export default function RootLayout({
       </head>
       <body className="bg-neutral-100">
         <Header/>
+        <Toaster/>
         {children}
       </body>
     </html>

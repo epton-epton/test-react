@@ -37,9 +37,10 @@ const Register: React.FC = () => {
       await set(ref(db, 'users/' + user.uid), {
         email: user.email
       });
-
+      console.log('Registration successful'); 
       toast.success('Registration successful'); 
     } catch (error) {
+      console.log('Registration error');
       toast.error('Registration error'); 
     }
   };
