@@ -1,45 +1,42 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import styles from '@/components/ChatPopup/chatPopup.module.css';
+import { useModel } from '@/components/context/ModelContext';
 
-interface ChatPopupProps {
-  buttonText: string;
-  onClose: () => void;
-}
-
-const ChatPopup: React.FC<ChatPopupProps> = ({ buttonText, onClose }) => {
+const ChatPopup: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const { modelName } = useModel(); // Используем модель из контекста
   const [message, setMessage] = useState('');
-  const [chatLog, setChatLog] = useState<string[]>([]);
+  const [chatLog, setChatLog] = useState<{ sender: 'You' | 'Model'; text: string }[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSend = async () => {
     if (!message.trim()) return;
-
+  
     setLoading(true);
-    setChatLog([...chatLog, `You: ${message}`]);
-
+    setChatLog((prevChatLog) => [...prevChatLog, { sender: 'You', text: message }]);
+  
     try {
       const response = await axios.post(
-        'https://api.freechatgpt.com/v1/chat/completions',
-        {
-          model: 'gpt-3.5-turbo',
-          messages: [{ role: 'user', content: message }],
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${process.env.REACT_APP_FREECHATGPT_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        }
+        '/api/chat',
+        { message }
       );
-
-      const botMessage = response.data.choices[0]?.message?.content || 'No response';
-      setChatLog([...chatLog, `Bot: ${botMessage}`]);
+  
+      const responseData = response.data;
+      const botMessage = responseData[0]?.generated_text || 'No response';
+  
+      setChatLog((prevChatLog) => [...prevChatLog, { sender: 'Model', text: botMessage }]);
       setMessage('');
     } catch (error) {
       console.error('Error fetching chat response:', error);
+      setChatLog((prevChatLog) => [...prevChatLog, { sender: 'Model', text: 'Error fetching response' }]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSend();
     }
   };
 
@@ -47,10 +44,13 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ buttonText, onClose }) => {
     <div className={`${styles.popup}`}>
       <div className={`${styles.popupContent}`}>
         <button className={`${styles.closeButton}`} onClick={onClose}>×</button>
-        <h2>{buttonText}</h2>
+        <h2 className={`${styles.chatHeading}`}>{modelName}</h2> {/* Используем modelName из контекста */}
         <div className={`${styles.chatLog}`}>
           {chatLog.map((msg, index) => (
-            <div key={index} className={`${styles.chatMessage}`}>{msg}</div>
+            <div key={index} className={`${styles.chatMessage}`}>
+              <strong className={msg.sender === 'You' ? styles.senderYou : styles.senderModel}>
+              {msg.sender}:</strong> {msg.text}
+            </div>
           ))}
           {loading && <div>Loading...</div>}
         </div>
@@ -59,12 +59,12 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ buttonText, onClose }) => {
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Type your message..."
           />
           <button onClick={handleSend}>Send</button>
         </div>
       </div>
-     
     </div>
   );
 };

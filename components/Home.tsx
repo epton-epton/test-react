@@ -3,8 +3,7 @@
 
 import React, { useState } from 'react';
 import ModelItem from '@/components/ModelItem/ModelItem';
-import styles from '@/components/modelItem/modelItem.module.css';
-import dotenv from 'dotenv';
+import styles from '@/components/ModelItem/ModelItem.module.css';
 
 const Home: React.FC = () => {
   return (

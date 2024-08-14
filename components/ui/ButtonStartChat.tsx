@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import ChatPopup from '@/components/ChatPopup/ChatPopup';
 
-interface ChatButtonProps {
-  modelNameChat: string;
-}
 
-const ChatButton: React.FC<ChatButtonProps> = ({ modelNameChat }) => {
+
+const ChatButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -16,7 +14,7 @@ const ChatButton: React.FC<ChatButtonProps> = ({ modelNameChat }) => {
         Start chat
       </button>
       {isOpen && (
-        <ChatPopup buttonText={modelNameChat} onClose={() => setIsOpen(false)} />
+        <ChatPopup  onClose={() => setIsOpen(false)} />
       )}
       <style jsx>{`
         .popup {
