@@ -44,7 +44,7 @@ const ChatPopup: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     <div className={`${styles.popup}`}>
       <div className={`${styles.popupContent}`}>
         <button className={`${styles.closeButton}`} onClick={onClose}>×</button>
-        <h2 className={`${styles.chatHeading}`}>{modelName}</h2> {/* Используем modelName из контекста */}
+        <h2 className={`${styles.chatHeading}`}>{modelName}</h2> 
         <div className={`${styles.chatLog}`}>
           {chatLog.map((msg, index) => (
             <div key={index} className={`${styles.chatMessage}`}>
