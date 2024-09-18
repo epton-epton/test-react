@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ChatPopup from '@/components/ChatPopup/ChatPopup';
-
+import { SessionProvider } from 'next-auth/react';
 
 
 const ChatButton: React.FC = () => {
@@ -14,7 +14,10 @@ const ChatButton: React.FC = () => {
         Start chat
       </button>
       {isOpen && (
-        <ChatPopup  onClose={() => setIsOpen(false)} />
+        <SessionProvider>
+          <ChatPopup  onClose={() => setIsOpen(false)} />
+        </SessionProvider>
+        
       )}
       <style jsx>{`
         .popup {
